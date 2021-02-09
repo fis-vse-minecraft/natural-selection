@@ -1,0 +1,4 @@
+name: NaturalSelection
+version: ${project.version}
+main: cz.vse.fis.minecraft.naturalselection.NaturalSelection
+api-version: 1.16
