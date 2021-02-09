@@ -1,17 +1,26 @@
 package cz.vse.fis.minecraft.naturalselection.commands;
 
+import cz.vse.fis.minecraft.naturalselection.NaturalSelectionRound;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Optional;
 
 public class NaturalSelectionCommandExecutor implements CommandExecutor {
+
+    private final JavaPlugin plugin;
+
+    public NaturalSelectionCommandExecutor(@NotNull JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(
             @NotNull CommandSender sender,
@@ -29,9 +38,13 @@ public class NaturalSelectionCommandExecutor implements CommandExecutor {
                 return false;
             }
 
-            List<Player> players = player.getWorld().getPlayers();
+            NaturalSelectionRound.startNew(player.getWorld(), plugin)
+                    .ifPresent(round -> {
+                        player.getWorld()
+                                .getPlayers()
+                                .forEach(it -> it.sendMessage(ChatColor.AQUA + "Yo yo yo, get ready... new round of natural selection starting soon(tm)." + ChatColor.RESET));
+                    });
 
-            players.forEach(it -> it.sendMessage(ChatColor.AQUA + "Yo yo yo, get ready... new round of natural selection starting soon(tm)." + ChatColor.RESET));
 
             return true;
         }

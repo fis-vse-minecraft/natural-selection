@@ -11,7 +11,7 @@ public final class NaturalSelection extends JavaPlugin {
         PluginCommand command = this.getCommand("natural-selection");
 
         if (command != null) {
-            command.setExecutor(new NaturalSelectionCommandExecutor());
+            command.setExecutor(new NaturalSelectionCommandExecutor(this));
         }
     }
 
