@@ -2,3 +2,6 @@ name: NaturalSelection
 version: ${project.version}
 main: cz.vse.fis.minecraft.naturalselection.NaturalSelection
 api-version: 1.16
+commands:
+  natural-selection:
+    description: Prepares new "world" for a new round of natural selection
