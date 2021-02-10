@@ -1,19 +1,22 @@
 package cz.vse.fis.minecraft.naturalselection;
 
+import cz.vse.fis.minecraft.naturalselection.listeners.DeleteObsoleteWorldListener;
 import cz.vse.fis.minecraft.naturalselection.utilities.WorldGenerator;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang.RandomStringUtils;
+import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
+@Getter
 @EqualsAndHashCode
-public class NaturalSelectionRound {
+public class NaturalSelectionRound implements Listener {
 
     private final World world;
 
@@ -23,8 +26,24 @@ public class NaturalSelectionRound {
 
     private static boolean isRunning = false;
 
-    private final static Listener[] listeners = new Listener[] {
+    private final Listener[] listeners = new Listener[] {
+            new DeleteObsoleteWorldListener(this)
     };
+
+    public static Optional<NaturalSelectionRound> startNew(@NotNull World world, @NotNull JavaPlugin plugin) {
+        if (isRunning) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new NaturalSelectionRound(world.getPlayers(), plugin));
+    }
+
+    public void reset() {
+        if (isRunning) {
+            isRunning = false;
+            WorldGenerator.deleteWorld(world);
+        }
+    }
 
     private NaturalSelectionRound(@NotNull List<Player> players, @NotNull JavaPlugin plugin) {
         isRunning = true;
@@ -33,17 +52,19 @@ public class NaturalSelectionRound {
         this.players = players;
         this.world = WorldGenerator.generateNaturalSelectionWorld();
 
-        // TODO: register event listeners
-
-        Location spawn = world.getSpawnLocation();
-        players.forEach(player -> player.teleport(spawn));
+        this.registerEventListeners();
+        this.initializeRound();
     }
 
-    public static Optional<NaturalSelectionRound> startNew(@NotNull World world, @NotNull JavaPlugin plugin) {
-        if (isRunning) {
-            return Optional.empty();
-        }
+    private void registerEventListeners() {
+        PluginManager pluginManager = Bukkit.getPluginManager();
 
-        return Optional.of(new NaturalSelectionRound(world.getPlayers(), plugin));
+        for (Listener listener : this.listeners) {
+            pluginManager.registerEvents(listener, plugin);
+        }
+    }
+
+    private void initializeRound() {
+        players.forEach(player -> player.teleport(world.getSpawnLocation()));
     }
 }
