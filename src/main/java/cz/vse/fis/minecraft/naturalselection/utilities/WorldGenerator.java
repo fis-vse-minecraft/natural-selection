@@ -39,7 +39,8 @@ public class WorldGenerator {
             }
         }
 
-        Bukkit.unloadWorld(world.getName(), false);
+        world.setKeepSpawnInMemory(false);
+        Bukkit.unloadWorld(world, false);
 
         TimerTask deleteWorldFolder = new TimerTask() {
             @Override
