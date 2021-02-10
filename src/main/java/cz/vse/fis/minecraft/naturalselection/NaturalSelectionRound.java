@@ -69,6 +69,7 @@ public class NaturalSelectionRound implements Listener {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void initializeRound() {
         this.state.setPvpEnabled(false);
         this.state.setPvpTimer(Bukkit.createBossBar(new NamespacedKey(plugin, "pvp_timer"), "Time until PVP", BarColor.RED, BarStyle.SOLID));
