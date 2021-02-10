@@ -37,11 +37,14 @@ public class NaturalSelectionCommandExecutor implements CommandExecutor {
             }
 
             NaturalSelectionRound.startNew(player.getWorld(), plugin)
-                    .ifPresent(round -> {
-                        player.getWorld()
-                                .getPlayers()
-                                .forEach(it -> it.sendMessage(ChatColor.AQUA + "Yo yo yo, get ready... new round of natural selection starting soon(tm)." + ChatColor.RESET));
-                    });
+                    .ifPresentOrElse(
+                            round -> {
+                                player.getWorld()
+                                        .getPlayers()
+                                        .forEach(it -> it.sendMessage(ChatColor.AQUA + "Yo yo yo, get ready... new round of natural selection starting soon(tm)." + ChatColor.RESET));
+                            },
+                            () -> player.sendMessage(ChatColor.RED + "Another round of natural selection is already running." + ChatColor.RESET)
+                    );
 
 
             return true;
