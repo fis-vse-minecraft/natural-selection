@@ -11,8 +11,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 public class NaturalSelectionCommandExecutor implements CommandExecutor {
 
     private final JavaPlugin plugin;
