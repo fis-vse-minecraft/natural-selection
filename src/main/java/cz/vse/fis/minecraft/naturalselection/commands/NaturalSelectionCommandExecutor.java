@@ -41,7 +41,11 @@ public class NaturalSelectionCommandExecutor implements CommandExecutor {
                             round -> {
                                 player.getWorld()
                                         .getPlayers()
-                                        .forEach(it -> it.sendMessage(ChatColor.AQUA + "Yo yo yo, get ready... new round of natural selection starting soon(tm)." + ChatColor.RESET));
+                                        .forEach(target -> target.sendTitle(
+                                                ChatColor.AQUA + "Yo yo yo, get ready..." + ChatColor.RESET,
+                                                "A new round of " + ChatColor.YELLOW + "natural selection" + ChatColor.RESET + " is starting",
+                                                20, 100, 20)
+                                        );
                             },
                             () -> player.sendMessage(ChatColor.RED + "Another round of natural selection is already running." + ChatColor.RESET)
                     );
