@@ -1,5 +1,6 @@
 package cz.vse.fis.minecraft.naturalselection;
 
+import cz.vse.fis.minecraft.naturalselection.utilities.WorldGenerator;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.*;
@@ -30,20 +31,12 @@ public class NaturalSelectionRound {
 
         this.plugin = plugin;
         this.players = players;
-        this.world = generateNaturalSelectionRound();
+        this.world = WorldGenerator.generateNaturalSelectionWorld();
 
         // TODO: register event listeners
 
         Location spawn = world.getSpawnLocation();
         players.forEach(player -> player.teleport(spawn));
-    }
-
-    private World generateNaturalSelectionRound() {
-        return Bukkit.createWorld(
-                new WorldCreator("ns_" + RandomStringUtils.randomAlphanumeric(16))
-                    .generateStructures(false)
-                    .type(WorldType.FLAT)
-        );
     }
 
     public static Optional<NaturalSelectionRound> startNew(@NotNull World world, @NotNull JavaPlugin plugin) {
